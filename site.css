@@ -1,0 +1,216 @@
+:root{
+  --bg: #fbf7f5;
+  --fg: #111111;
+  --muted: #666666;
+  --rule: #c9c9c9;
+
+  /* cycles on logo click */
+  --accent: #2A5DB0;
+
+  --maxw: 140ch;
+}
+
+body{
+  margin:0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+               "Liberation Mono","Courier New", monospace;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Dark mode */
+body.dark-mode{
+  --bg:#11211a;
+  --fg:#F8F0E3;
+  --muted:#b5b5b5;
+  --rule:#3a4b44;
+}
+
+/* Links use the cycling accent */
+a{
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+a:hover{ text-decoration-thickness: 2px; }
+
+/* ===== Noise overlay ===== */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events:none;
+
+  background-image: url("assets/background-noise.png");
+  background-repeat: repeat;
+  background-size: 2000px 2000px;      /* key: big enough to see */
+  opacity: 0.25;
+
+  animation: noise 0.12s steps(2) infinite;
+}
+
+@keyframes noise {
+  0%, 100% { background-position: 0 0; }
+  10% { background-position: -5% -10%; }
+  20% { background-position: -15% 5%; }
+  30% { background-position: 7% -25%; }
+  40% { background-position: 20% 25%; }
+  50% { background-position: -25% 10%; }
+  60% { background-position: 15% 5%; }
+  70% { background-position: 0% 15%; }
+  80% { background-position: 25% 35%; }
+  90% { background-position: -10% 10%; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  body::before{ animation: none; }
+}
+
+/* Keep content above the overlay */
+header, main, footer{ position: relative; z-index: 1; }
+
+main{
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 26px 18px 56px;
+}
+
+.divider{
+  height: 2px;              /* try 1px if you want thinner */
+  background: var(--rule);
+  margin: 14px 0;
+  opacity: 0.65;            /* bump up if still subtle */
+}
+
+/* ASCII logo button */
+#logoBtn{
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+  text-align:left;
+  color: inherit;
+  font: inherit;
+}
+#logoArt{
+  margin:0 0 10px;
+  white-space: pre;
+  overflow-x: auto;
+  font-size: 11px;
+  line-height: 1.15;
+  user-select: none;
+}
+.ch{ display:inline; } /* spans used for colored ASCII chars */
+
+/* button sits nicely in the nav row */
+nav .nav-btn{
+  margin-left: 0.25ch;
+  padding: 0.05rem 0.45rem;
+  line-height: 1.2;
+}
+
+/* make the separator its own little inline-block with spacing */
+.xsep > * + *::before{
+  display: inline-block;
+  content:" ⫻ ";
+  color: var(--muted);
+  margin: 0 0.6ch;
+}
+
+/* keep button border from visually "touching" the separator */
+.xsep button::before{ content: none; } /* (does nothing but safe) */
+
+h1, h2, h3{
+  line-height:1.25;
+  margin:0.95em 0 0.35em;
+  font-weight:700;
+}
+h1{ font-size:1.55rem; margin-top:0.5em; }
+h2{ font-size:1.1rem; }
+h3{ font-size:1rem; color: var(--muted); }
+
+section{ margin: 1.25em 0 1.75em; }
+ul{ padding-left: 2ch; }
+li{ margin: 0.55em 0; }
+
+.meta{ color: var(--muted); margin: 0.35em 0 0; }
+
+.btn{
+  font: inherit;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--fg);
+  padding: 0.15rem 0.55rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn:hover{ border-color: var(--muted); }
+
+.about-container{
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.headshot{
+  width:180px;
+  height:180px;
+  object-fit:cover;
+  border-radius:50%;
+  flex:0 0 auto;
+  border:1px solid var(--rule);
+}
+
+.media-row{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap:18px;
+  align-items:start;
+  margin-top:12px;
+}
+
+.media-item img,
+.media-item video{
+  max-width:100%;
+  height:auto;
+  border:1px solid var(--rule);
+  border-radius:10px;
+  background:transparent;
+}
+
+.caption{
+  margin-top:8px;
+  font-size:0.95rem;
+  color: var(--muted);
+}
+
+.container{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+  margin:12px 0;
+}
+
+.container img{
+  max-width:100%;
+  height:auto;
+  border-radius:10px;
+  border:1px solid var(--rule);
+}
+
+footer{
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 18px 28px;
+  color: var(--muted);
+}
+
+.meOpp{
+  color: var(--accentOpp);
+  font-weight: 800;
+}

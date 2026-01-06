@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Max A. B. Haase | Scientist</title>
+
+  <style>
+    :root{
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #666666;
+      --rule: #bdbdbd;
+
+      /* this is what cycles when you click the ASCII logo */
+      --accent: #2A5DB0;
+
+      --maxw: 140ch;
+    }
+
+    body{
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+                   "Liberation Mono", "Courier New", monospace;
+      line-height: 1.6;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    /* Dark mode */
+    body.dark-mode{
+      --bg: #11211a;
+      --fg: #E0E0E0;
+      --muted: #b5b5b5;
+      --rule: #3a4b44;
+    }
+
+    /* LINKS use the cycling accent color */
+    a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+    a:hover{ text-decoration-thickness: 2px; }
+
+    /* --- THE NOISE EFFECT (this is the one you asked for) --- */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+
+      background-image: url("background-noise.png");
+      background-repeat: repeat;
+      background-size: 2000px 2000px;   /* IMPORTANT: makes motion easier to see */
+
+      opacity: 0.25;                  /* crank it up so it’s obvious */
+      mix-blend-mode: normal;         /* normal for testing */
+
+      animation: noiseMove 0.12s steps(2) infinite;
+    }
+
+    @keyframes noiseMove{
+      0%   { transform: translate3d(0,0,0); }
+      10%  { transform: translate3d(-10px,-15px,0); }
+      20%  { transform: translate3d(-25px, 10px,0); }
+      30%  { transform: translate3d( 12px,-30px,0); }
+      40%  { transform: translate3d( 30px, 25px,0); }
+      50%  { transform: translate3d(-35px, 15px,0); }
+      60%  { transform: translate3d( 20px, 10px,0); }
+      70%  { transform: translate3d(  0px, 25px,0); }
+      80%  { transform: translate3d( 35px, 40px,0); }
+      90%  { transform: translate3d(-15px, 15px,0); }
+      100% { transform: translate3d(0,0,0); }
+    }
+
+
+    @media (prefers-reduced-motion: reduce){
+      body::before{ animation: none; }
+    }
+
+    /* keep content above the noise */
+    header, main, footer{ position: relative; z-index: 1; }
+
+    main{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 26px 18px 56px;
+    }
+
+    .divider{
+      margin: 14px 0;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      user-select: none;
+    }
+
+    /* ASCII logo button */
+    #logoBtn{
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+      color: inherit;
+      font: inherit;
+    }
+    #logoArt{
+      margin: 0 0 10px;
+      white-space: pre;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.25;
+      user-select: none;
+    }
+    .ch{
+      display: inline-block;
+      width: 1ch; /* preserves monospace alignment */
+    }
+
+    /* Nav with ⫻ separators */
+    nav{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5ch;
+      align-items: baseline;
+    }
+    nav a{ text-decoration: none; }
+    nav a:hover{ text-decoration: underline; }
+
+    .xsep > * + *::before{
+      content: " ⫻ ";
+      color: var(--muted);
+      margin: 0 0.5ch;
+    }
+
+    h1, h2, h3{
+      line-height: 1.25;
+      margin: 0.95em 0 0.35em;
+      font-weight: 700;
+    }
+    h1{ font-size: 1.55rem; margin-top: 0.5em; }
+    h2{ font-size: 1.1rem; }
+    h3{ font-size: 1.0rem; color: var(--muted); }
+
+    section{ margin: 1.25em 0 1.75em; }
+    ul{ padding-left: 2ch; }
+    li{ margin: 0.55em 0; }
+
+    .btn{
+      font: inherit;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--fg);
+      padding: 0.15rem 0.55rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn:hover{ border-color: var(--muted); }
+
+    .about-container{
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .headshot{
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      border: 1px solid var(--rule);
+    }
+
+    .media-row{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      align-items: start;
+      margin-top: 12px;
+    }
+
+    .media-item img,
+    .media-item video{
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      background: transparent;
+    }
+
+    .caption{
+      margin-top: 8px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .container{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .container img{
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--rule);
+    }
+
+    footer{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 18px 28px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <!-- Click logo to cycle link color -->
+      <button id="logoBtn" type="button" aria-label="Cycle link color">
+        <pre id="logoArt">
+          __    __     ______     __  __        __  __     ______     ______     ______     ______
+         /\ "-./  \   /\  __ \   /\_\_\_\      /\ \_\ \   /\  __ \   /\  __ \   /\  ___\   /\  ___\
+         \ \ \-./\ \  \ \  __ \  \/_/\_\/_     \ \  __ \  \ \  __ \  \ \  __ \  \ \___  \  \ \  __\
+          \ \_\ \ \_\  \ \_\ \_\   /\_\/\_\     \ \_\ \_\  \ \_\ \_\  \ \_\ \_\  \/\_____\  \ \_____\
+           \/_/  \/_/   \/_/\/_/   \/_/\/_/      \/_/\/_/   \/_/\/_/   \/_/\/_/   \/_____/   \/_____/
+
+
+        </pre>
+      </button>
+
+      <div class="divider" aria-hidden="true">* * *</div>
+
+      <nav class="xsep" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#research">Research</a>
+        <a href="#publications">Publications</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="divider" aria-hidden="true">* * *</div>
+
+      <h1>Max A. B. Haase</h1>
+      <p style="margin:0.35em 0 0; color: var(--muted);">Scientist ⫻ Researcher ⫻ Educator</p>
+
+      <button id="dark-mode-toggle" class="btn" type="button" style="margin-top:10px;">
+        Toggle Dark Mode
+      </button>
+
+      <div class="divider" aria-hidden="true">* * *</div>
+    </header>
+
+    <!-- INTRO -->
+    <section id="Intro">
+      <h2><code>Mechanistic Evolutionary Biology using the Awesome Power of Yeast Genetics</code></h2>
+      <h3>Cell Cycle Division | Chromatin | Evolution | Genetics | Biochemistry</h3>
+
+      <p>
+        Life's molecular machines have been shaped by billions years of evolution. While these macromolecular machines have conserved components suggesting they evolved for optimal efficiency, they nonetheless are rampent with unintuitive mechanism by which they function and evolve.
+        My research aims to gain a better understanding of the natural world using the historical context of evolution in combination with genetic and biochemical methods. In particular I
+        their many
+        esquiste atomic structures imply
+        The molecular machines of life have been shaped by billions years of evolution. This can lead to unintuitive ways by which cells operate. My research aims to gain a better understanding of the natural world within, and around us using the historical context of evolution. In particular I am fascinated by the process of chromosome segregation and the processes that ensure its high fidelity across eons. My long term ambition to gain a high resolution understanding of how genomes functionally evolve. To do this I am using the diversity of an entire subphylum of species, the Saccharomycotina, which is home to the Brewer’s yeast Saccharomyces. The benefits of this systems are many: 1) They are closely related to humans and share thousands of genes and functions, 2) They are as diverse at the level of DNA as all animals and plants, 3) They have small, simplified genomes, and species-specific genetic manipulation are possible, and 4) Their small genomes have undergone many revolutionary changes, making their genomes a treasure trove of compelling evolutionary stories.
+      </p>
+
+      <p>
+        My goal is to achieve a phylum level resolution of functional genome elements like the centromeres to better understand how species and genomes evolve. These question manifest at many levels, but my current focus is on the precise atomic structure of the native centromere-kinetochore complex and the evolutionary derivation of point centromeres.
+      </p>
+    </section>
+
+    <div class="divider" aria-hidden="true">* * *</div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h2>About Me</h2>
+      <div class="about-container">
+        <img src="MaxHaase2br2.png" alt="Max Haase" class="headshot">
+        <div>
+          <p>
+            I am an American evolutionary biologist with interests in how cells divide, how chromosomes organize, and how genomes evolve.
+            I received my PhD from New York University where I worked with Jef Boeke. And I am currently a MSCA Postdoctoral Fellow with Andrea Musacchio at the MPI in Dortmund.
+          </p>
+          <p><a href="MaxHaase_CV.pdf" download>My CV (PDF)</a></p>
+        </div>
+      </div>
+
+      <div class="media-item" style="margin-top: 14px;">
+        <img id="research-image" src="wordcloud_light.png" alt="Research Example Image" width="480" height="480">
+        <div class="caption">Wordle made from abstracts of articles published between 2017 and 2023</div>
+      </div>
+    </section>
+
+    <div class="divider" aria-hidden="true">* * *</div>
+
+    <!-- RESEARCH (Current + Gallery) -->
+    <section id="research">
+      <h2>Research</h2>
+
+      <h3>Current Research</h3>
+      <p>
+        My current research explores how Brewer's yeast centromeres evolved and how their centromeres nucleate kinetochore assembly.
+        I use multidisciplinary approaches such as phylogenetics, genomics, biochemistry, and structural methods.
+      </p>
+
+      <h3>Centromere Evolutionary Genomics</h3>
+      <div class="container">
+        <img src="Untitled-1-01.png" alt="Descriptive Image Text" width="720" height="360">
+        <p>
+          Unlike the majority of eukaryotes, Brewer's yeast have genetic "point" centromeres. Despite being the first centromeres to be discovered over forty years ago, we still have no idea how they evolved. As they shared no clear homology to other centromere types, piecing togther this puzzle has not been possible. Our work in a sister group to Brewer's yeast revealed a new type of centromere, "proto-points", which represent an evolutionary transistion state that showed that point centromeres are direct decendents of LTR retrotransposons.
+        </p>
+      </div>
+
+      <ul>
+        <li>
+          <strong>Haase MAB<sup>@</sup></strong>, Lazar-Stefanita L, Baudry L, Wudzinska A, Zhou X, Rokas A, Hittinger CT, Musacchio A, Boeke JD<sup>@</sup>. (2025).
+          <a href="https://www.biorxiv.org/content/10.1101/2025.04.25.647736v1.abstract" target="_blank" rel="noreferrer">Ancient co-option of LTR retrotransposons as yeast centromeres</a>.
+          <em>bioRxiv</em>, 2025.04.25.647736.
+        </li>
+      </ul>
+
+      <p>
+        I am also interested in how historical contigency shapes modern day centromere function. From this perspecitive I am seeking to understand how the ancient allopolyploid whole genome duplication event shaped modern day function of <em>S. cerevisiae</em>'s' centromeres. The original observation and hypothesis were published in my PhD work.
+      </p>
+
+      <ul>
+        <li>
+          <strong>Haase MAB</strong>, Ólafsson G, Flores RL, Boakye-Ansah E, Zelter A, Dickinson MS, Lazar-Stefanita L, Truong DM, Asbury CL, Davis TN, Boeke JD<sup>@</sup>. (2023).
+          <a href="https://www.embopress.org/doi/full/10.15252/embj.2022112600" target="_blank" rel="noreferrer">DASH/Dam1 complex mutants stabilize ploidy in histone-humanized yeast by weakening kinetochore-microtubule attachments</a>.
+          <em>EMBO Journal</em>
+        </li>
+      </ul>
+
+      <h3>Native Centromere-Kinetochore Structure (CENStruK)</h3>
+      <div class="container">
+        <img src="Untitled-1-02.png" alt="Descriptive Image Text" width="720" height="360">
+        <p>
+          Despite knowing how yeast centromeres evolved, we still lack a detailed molecular understanding of how they nucleate kinetochore assembly. I am now investigating native centromere-kinetochore strucutes to uncover the atomic details of how centromere DNA does this.
+        </p>
+      </div>
+
+      <p>
+        I am sharing my funded MCSA fellowship partly because I found it very useful to see other examples when drafting mine, but there really aren't many examples pubically available. I think especially for those researchers without well prepared institutional support, drafting the proposal can be quite daunting. So I hope it can help someone, but please read the action's instructions carefully as the format changes!
+      </p>
+
+      <p><a href="CENStruK_MSCA_PartB1.pdf" download>My MSCA Proposal Part 1B (PDF)</a></p>
+
+      <h3>Gallery</h3>
+      <p>Below are some videos and images taken from my research.</p>
+
+      <div class="media-row">
+        <div class="media-item">
+          <video autoplay muted loop controls>
+            <source src="GENETICS-2023-306264_Supplemental_Video_2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="caption">Cells of <em>Hanseniaspora uvarum</em> growing in rich medium. These cells grow rapidly, with a doubling time ~60 min. Histone H2A is tagged to track divisions.</div>
+        </div>
+
+        <div class="media-item">
+          <video controls>
+            <source src="video2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="caption">Histone humanized yeasts display continuely fragmented nucleoli throughout the cell cycle. Shown here are cells with NOP10 tagged.</div>
+        </div>
+
+        <div class="media-item">
+          <img src="image.jpg" alt="Descriptive Image Text">
+          <div class="caption">My first synteny analysis – a mainstay in my research.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider" aria-hidden="true">* * *</div>
+
+    <!-- PUBLICATIONS (your “Past Research” list moved here and ids fixed) -->
+    <section id="publications">
+      <h2>Publications</h2>
+
+      <h3>Past Research</h3>
+      <p>Below are some topics I have interest in and many represents work I have done in collaboration.</p>
+
+      <h3>Humanized yeasts</h3>
+      <p>During my Phd I studied a histone humanized yeast model. We studied how yeast evolve with human histones, what variants histone function in yeast, and what yeast kinetochore components are replaceable with human homologs.</p>
+      <ul>
+        <li>
+          <strong>Haase MAB</strong>, Lazar-Stefanita L, Ólafsson G, Wudzinska A, Shen MJ, Truong DM, Boeke JD<sup>@</sup>. (2024).
+          <a href="https://doi.org/10.1016/j.celrep.2024.114472" target="_blank" rel="noreferrer">macroH2A1 drives nucleosome dephasing and genome instability in histone humanized yeast</a>.
+          <em>Cell Reports</em>
+        </li>
+        <li>
+          Lazar-Stefanita L<sup>@</sup>, <strong>Haase MAB</strong>, Boeke JD<sup>@</sup>. (2023).
+          <a href="https://doi.org/10.1101/2023.05.06.539710" target="_blank" rel="noreferrer">Humanized nucleosomes reshape replication initiation and rDNA/nucleolar integrity in yeast</a>.
+          <em>BioRxiv</em>
+        </li>
+        <li>
+          Ólafsson G<sup>@</sup>, <strong>Haase MAB</strong>, Boeke JD<sup>@</sup>. (2024).
+          <a href="https://doi.org/10.1093/g3journal/jkad260" target="_blank" rel="noreferrer">Humanization reveals pervasive incompatibility of yeast and human kinetochore components</a>.
+          <em>G3: Genes Genomes Genetics</em>
+        </li>
+        <li>
+          <strong>Haase MAB</strong>, Ólafsson G, Flores RL, Boakye-Ansah E, Zelter A, Dickinson MS, Lazar-Stefanita L, Truong DM, Asbury CL, Davis TN, Boeke JD<sup>@</sup>. (2023).
+          <a href="https://www.embopress.org/doi/full/10.15252/embj.2022112600" target="_blank" rel="noreferrer">DASH/Dam1 complex mutants stabilize ploidy in histone-humanized yeast by weakening kinetochore-microtubule attachments</a>.
+          <em>EMBO Journal</em>
+        </li>
+      </ul>
+
+      <h3>Synthetic genomics</h3>
+      <p>During my PhD I also contributed to synthetic genome projects.</p>
+      <ul>
+        <li>
+          Lauer SL, Luo J, Lazar-Stefanita L, Zhang W, McCulloch LM, Fanfani V, Lobzaev E, <strong>Haase MAB</strong>, Easo N, Zhao Y, Yu F, Cai J, The Build-A-Genome class, Bader JS, Stracquadanio G, Boeke JD<sup>@</sup>. (2023).
+          <a href="https://www.sciencedirect.com/science/article/pii/S2666979X23002720" target="_blank" rel="noreferrer">Context-dependent neocentromere activity in synthetic yeast chromosome VIII</a>.
+          <em>Cell Genomics</em>
+        </li>
+        <li>
+          Zhang W, Lazar-Stefanita L, Yamashita H, Shen MJ, Mitchell LA, Kurasawa H, Lobzaev E, Fanfani F, <strong>Haase MAB</strong>, Sun X, [...], Boeke JD<sup>@</sup>. (2023).
+          <a href="https://doi.org/10.1016/j.molcel.2023.10.015" target="_blank" rel="noreferrer">Manipulating the 3D organization of the largest synthetic yeast chromosome</a>.
+          <em>Molecular Cell</em>
+        </li>
+        <li>
+          Lazar-Stefanita L, Luo J, <strong>Haase MAB</strong>, Zhang W, Boeke JD<sup>@</sup>. (2023).
+          <a href="https://pubmed.ncbi.nlm.nih.gov/36821584/" target="_blank" rel="noreferrer">Two differentially stable rDNA loci coexist on the same chromosome and form a single nucleolus</a>.
+          <em>PNAS</em>
+        </li>
+      </ul>
+
+      <h3>Yeast Evolutionary Genomics and Taxonomy</h3>
+      <p>Since my undergraduate research training I have continued my work on yeast evolutionary genomics.</p>
+      <ul>
+        <li>
+          <strong>Haase MAB<sup>@</sup></strong>, Steenwyk JL, Boeke JD. (2024).
+          <a href="https://academic.oup.com/genetics/article/226/3/iyae008/7589637" target="_blank" rel="noreferrer">Gene loss and cis-regulatory novelty shaped core histone gene evolution in the apiculate yeast <em>Hanseniaspora uvarum</em></a>.
+          <em>Genetics</em>
+        </li>
+        <li>
+          Opulente DA, LaBella AL, Harrison MC, Wolters JF, Liu C, Kominek J, Steenwyk JL, Stoneman HR, VanDenAvond J, Miller CR, Langdon QK, Silva M, Gonçalves C, Ubbelohde EJ, Li Y, Buh KV, Jarzyna M, <strong>Haase MAB</strong>, Rosa CA, ˇCadež N, Libkind D, DeVirgilio JH, Hulfachor AB, Kurtzman CP, Sampaio JP, Gonçalves P, Zhou X, Shen XX, Groenewald M, Rokas A<sup>@</sup>, Hittinger CT<sup>@</sup> (2024).
+          <a href="https://www.science.org/doi/full/10.1126/science.adj4503" target="_blank" rel="noreferrer">Genomic factors shape carbon and nitrogen metabolic niche breadth across Saccharomycotina yeasts</a>.
+          <em>Science</em>
+        </li>
+        <li>
+          Opulente DA<sup>@</sup>, Langdon QK, Jarzyna M, Buh KV, <strong>Haase MAB</strong>, Groenewald M, Hittinger CT<sup>@</sup>. (2023).
+          <a href="https://doi.org/10.1002/yea.3905" target="_blank" rel="noreferrer">Taxogenomic analysis of a novel yeast species isolated from soil, <em>Pichia galeolata</em> sp. nov.</a>.
+          <em>Yeast</em>
+        </li>
+        <li>
+          Spurley WJ, Fisher KJ, Langdon QK, Buh KV, Jarzyna M, <strong>Haase MAB</strong>, Moriarty RV, Rodriguez D, Sheddan A, Wright S, Sorlie L, Hulfachor AB, Opulente DA, Hittinger CT<sup>@</sup>. (2021).
+          <a href="https://pubmed.ncbi.nlm.nih.gov/34741351/" target="_blank" rel="noreferrer">Substrate, temperature, and geographical patterns among nearly 2,000 natural yeast isolates</a>.
+          <em>Yeast</em>
+        </li>
+        <li>
+          O’Brien CE, Oliveira-Pacheco J, Cinnéide EO, <strong>Haase MAB</strong>, Hittinger CT, Rogers TR, Zaragoza O, Bond U, Butler G<sup>@</sup>. (2021).
+          <a href="https://journals.plos.org/plospathogens/article?id=10.10.1371/journal.ppat.1009138" target="_blank" rel="noreferrer">Population genomics of the pathogenic yeast <em>Candida tropicalis</em> identifies hybrid isolates in environmental samples</a>.
+          <em>PLOS Pathogens</em>
+        </li>
+        <li>
+          <strong>Haase MAB<sup>=</sup></strong>, Kominek J<sup>=</sup>, Opulente DA, Shen X, LaBella AL, Zhou X, DeVirgilio J, Hulfachor AB, Kurtzman CP, Rokas A, Hittinger CT<sup>@</sup>. (2021).
+          <a href="https://academic.oup.com/genetics/article/217/2/iyaa012/6007471" target="_blank" rel="noreferrer">Repeated horizontal gene transfer of GALactose metabolism genes violates Dollo’s law of irreversible loss</a>.
+          <em>Genetics</em>
+        </li>
+        <li>
+          Dharampal PS, Diaz-Garcia L, <strong>Haase MAB</strong>, Zalapa J, Currie CR, Hittinger CT, Steffan SA<sup>@</sup>. (2020).
+          <a href="https://www.mdpi.com/2075-4450/11/4/250" target="_blank" rel="noreferrer">Microbial Diversity Associated with the Pollen Stores of Captive-Bred Bumble Bee Colonies</a>.
+          <em>Insects</em>
+        </li>
+        <li>
+          Opulente DA, Langdon QK, Buh KV, <strong>Haase MAB</strong>, Sylvester K, Moriarty RV, Jarzyna M, Considine SL, Schneider RM, Hittinger CT<sup>@</sup>. (2019).
+          <a href="https://academic.oup.com/femsyr/article/19/3/foz032/5479245?login=false" target="_blank" rel="noreferrer">Pathogenic budding yeast Isolated outside of clinical settings</a>.
+          <em>FEMS Yeast Research</em>
+        </li>
+        <li>
+          Shen X, Opulente DA, Kominek J, Zhou X, Steenwyk J, Buh KV, <strong>Haase MAB</strong>, Wisecaver JH, Wang M, Doering DT, Boudouris JT, Schneider RM, Langdon QK, Ohkuma M, Endoh R, Takashima M, Manabe R, Cadez N, Libkind D, Rosa CA, DeVirgilio J, Hulfachor AB, Groenewald M, Kurtzman CP<sup>@</sup>, Hittinger CT<sup>@</sup>, Rokas A<sup>@</sup>. (2018).
+          <a href="https://pubmed.ncbi.nlm.nih.gov/30415838/" target="_blank" rel="noreferrer">Tempo and mode of genome evolution in the budding yeast subphylum</a>.
+          <em>Cell</em>
+        </li>
+        <li>
+          <strong>Haase MAB</strong>, Kominek J, Langdon QK, Kurtzman CP, Hittinger CT<sup>@</sup>. (2017).
+          <a href="https://academic.oup.com/femsyr/article/17/3/fox019/3737663" target="_blank" rel="noreferrer">Genome sequence and physiological analysis of <em>Yamadazyma laniorum</em> f.a. sp. nov. and a reevaluation of the apocryphal xylose fermentation of its sister species, <em>Candida tenuis</em></a>.
+          <em>FEMS Yeast Research</em>
+        </li>
+      </ul>
+
+      <h3>Deep Mutational Scanning of Bacterial Lipid Transporters</h3>
+      <p>During my time at NYU I also collaborated on developing a pipeline for deep mutational scanning of proteins.</p>
+      <ul>
+        <li>
+          Santarossa CC, Li Y, Yousef S, Hasdemir HS, Rodriguez CC, <strong>Haase MAB</strong>, Baek M, Coudray N, Pavek JG, Focke KN, Silverberg AL, Bautista C, Yeh J, Marty M, Baker D, Tajkhorshid E, Ekiert DC<sup>@</sup>, Bhabha G<sup>@</sup> (2025).
+          <a href="https://www.biorxiv.org/content/10.1101/2025.03.21.644421v1.full.pdf+html" target="_blank" rel="noreferrer">LetA defines a structurally distinct transporter family involved in lipid trafficking</a>.
+          <em>bioRxiv</em>
+        </li>
+        <li>
+          MacRae MR, Puvanendran D, <strong>Haase MAB</strong>, Coudray N, Kolich L, Lam C, Baek M, Bhabha G<sup>@</sup>, Ekiert DC<sup>@</sup> (2023).
+          <a href="https://pubmed.ncbi.nlm.nih.gov/37100290/" target="_blank" rel="noreferrer">Protein-protein interactions in the Mla lipid transport system probed by computational structure prediction and deep mutational scanning</a>.
+          <em>JBC</em>
+        </li>
+      </ul>
+    </section>
+
+    <div class="divider" aria-hidden="true">* * *</div>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Email: max.haase[at]mpi-dortmund.mpg[dot]de</p>
+      <p>Bsky: <a href="https://bsky.app/profile/maxhaase.bsky.social" target="_blank" rel="noreferrer">@maxhaase.bsky.social</a></p>
+      <p>Google Scholar: <a href="https://scholar.google.com/citations?user=6mpY8u8AAAAJ&hl=en" target="_blank" rel="noreferrer">View my profile</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="divider" aria-hidden="true">* * *</div>
+    &copy; <span id="year"></span> Max Haase. All rights reserved.
+  </footer>
+
+  <script>
+    // Palette used for ASCII letters AND cycling link color
+    const PALETTE = [
+      "#ff4d4d",
+      "#ff9f1c",
+      "#ffd60a",
+      "#2ec4b6",
+      "#3a86ff",
+      "#8338ec",
+      "#ff006e",
+    ];
+
+    const logoPre = document.getElementById("logoArt");
+    const logoBtn = document.getElementById("logoBtn");
+
+    function setAccentByIndex(i) {
+      const idx = ((i % PALETTE.length) + PALETTE.length) % PALETTE.length;
+      document.documentElement.style.setProperty("--accent", PALETTE[idx]);
+      localStorage.setItem("accentIndex", String(idx));
+      return idx;
+    }
+
+    function escapeHtml(ch) {
+      if (ch === "&") return "&amp;";
+      if (ch === "<") return "&lt;";
+      if (ch === ">") return "&gt;";
+      return ch;
+    }
+
+    /**
+     * Colors each BIG ASCII "letter" (connected component) as a unified color.
+     * Components are detected with 8-neighbor connectivity and then ordered left-to-right.
+     * Each component gets a palette color (alternating through the palette).
+     */
+    function renderAsciiByLetter(preEl, palette, offset = 0) {
+      const raw = preEl.textContent.replace(/\r\n/g, "\n");
+
+      // Split lines; keep trailing spaces by padding later
+      let lines = raw.split("\n");
+
+      // If the last line is empty because of a trailing newline, keep it (optional).
+      // Removing it often looks nicer:
+      if (lines.length && lines[lines.length - 1].trim() === "" && lines[lines.length - 1].length === 0) {
+        lines = lines.slice(0, -1);
+      }
+
+      const rows = lines.length;
+      const cols = Math.max(...lines.map(l => l.length), 0);
+
+      // Pad lines to same length for grid indexing
+      const grid = lines.map(l => l.padEnd(cols, " ").split(""));
+
+      // Connected components over non-space chars
+      const visited = Array.from({ length: rows }, () => Array(cols).fill(false));
+      const compId = Array.from({ length: rows }, () => Array(cols).fill(-1));
+      const comps = []; // { id, minC, minR, cells: [[r,c],...] }
+
+      const inBounds = (r, c) => r >= 0 && r < rows && c >= 0 && c < cols;
+
+      let nextId = 0;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          if (visited[r][c]) continue;
+          if (grid[r][c] === " ") continue;
+
+          // BFS/DFS for a component (8-neighbor)
+          const id = nextId++;
+          const stack = [[r, c]];
+          visited[r][c] = true;
+          compId[r][c] = id;
+
+          let minC = c;
+          let minR = r;
+          const cells = [];
+
+          while (stack.length) {
+            const [rr, cc] = stack.pop();
+            cells.push([rr, cc]);
+            if (cc < minC) minC = cc;
+            if (rr < minR) minR = rr;
+
+            for (let dr = -1; dr <= 1; dr++) {
+              for (let dc = -1; dc <= 1; dc++) {
+                if (dr === 0 && dc === 0) continue;
+                const nr = rr + dr;
+                const nc = cc + dc;
+                if (!inBounds(nr, nc)) continue;
+                if (visited[nr][nc]) continue;
+                if (grid[nr][nc] === " ") continue;
+
+                visited[nr][nc] = true;
+                compId[nr][nc] = id;
+                stack.push([nr, nc]);
+              }
+            }
+          }
+
+          comps.push({ id, minC, minR, cells });
+        }
+      }
+
+      // Order components left-to-right (then top-to-bottom)
+      comps.sort((a, b) => (a.minC - b.minC) || (a.minR - b.minR));
+
+      // Map original component id -> "letter index" 0..N-1
+      const idToLetterIndex = new Map();
+      comps.forEach((c, i) => idToLetterIndex.set(c.id, i));
+
+      // Render HTML
+      let html = "";
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const ch = grid[r][c];
+          if (ch === " ") {
+            html += " ";
+            continue;
+          }
+
+          const originalId = compId[r][c];
+          const letterIndex = idToLetterIndex.get(originalId) ?? 0;
+
+          const color = palette[(letterIndex + offset) % palette.length];
+          html += `<span class="ch" data-letter="${letterIndex}" style="color:${color}">${escapeHtml(ch)}</span>`;
+        }
+        if (r < rows - 1) html += "\n";
+      }
+
+      preEl.innerHTML = html;
+    }
+
+    function recolorAsciiByLetter(preEl, palette, offset = 0) {
+      const spans = preEl.querySelectorAll(".ch[data-letter]");
+      for (const s of spans) {
+        const letterIndex = Number(s.dataset.letter) || 0;
+        s.style.color = palette[(letterIndex + offset) % palette.length];
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // year
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // restore accent index
+      let accentIndex = Number(localStorage.getItem("accentIndex"));
+      if (!Number.isFinite(accentIndex)) accentIndex = 0;
+
+      accentIndex = setAccentByIndex(accentIndex);
+
+      // Render logo so each BIG letter is one color (alternating through the palette)
+      renderAsciiByLetter(logoPre, PALETTE, accentIndex);
+
+      // Click logo: cycle link color (and also shift the ASCII colors together)
+      logoBtn.addEventListener("click", () => {
+        accentIndex = setAccentByIndex(accentIndex + 1);
+        recolorAsciiByLetter(logoPre, PALETTE, accentIndex);
+      });
+
+      // dark mode toggle + persist + swap wordcloud image
+      const toggleButton = document.getElementById("dark-mode-toggle");
+      const body = document.body;
+      const researchImage = document.getElementById("research-image");
+
+      const darkModeEnabled = localStorage.getItem("dark-mode") === "enabled";
+      if (darkModeEnabled) body.classList.add("dark-mode");
+
+      function syncWordcloud() {
+        if (!researchImage) return;
+        const isDark = body.classList.contains("dark-mode");
+        researchImage.src = isDark ? "wordcloud_Dark.png" : "wordcloud_light.png";
+      }
+      syncWordcloud();
+
+      toggleButton.addEventListener("click", () => {
+        const isDarkMode = body.classList.toggle("dark-mode");
+        localStorage.setItem("dark-mode", isDarkMode ? "enabled" : "disabled");
+        syncWordcloud();
+      });
+    });
+  </script>
+
+
+</body>
+</html>
+```

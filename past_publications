@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications | Max A. B. Haase</title>
+  <link rel="stylesheet" href="site.css" />
+  <script defer src="site.js"></script>
+</head>
+
+<body>
+  <main>
+    <header>
+      <button id="logoBtn" type="button" aria-label="Cycle link color">
+<pre id="logoArt">
+  __    __     ______     __  __        __  __     ______     ______     ______     ______
+ /\ "-./  \   /\  __ \   /\_\_\_\      /\ \_\ \   /\  __ \   /\  __ \   /\  ___\   /\  ___\
+ \ \ \-./\ \  \ \  __ \  \/_/\_\/_     \ \  __ \  \ \  __ \  \ \  __ \  \ \___  \  \ \  __\
+  \ \_\ \ \_\  \ \_\ \_\   /\_\/\_\     \ \_\ \_\  \ \_\ \_\  \ \_\ \_\  \/\_____\  \ \_____\
+   \/_/  \/_/   \/_/\/_/   \/_/\/_/      \/_/\/_/   \/_/\/_/   \/_/\/_/   \/_____/   \/_____/
+
+                                                                        </pre>
+      </button>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <nav class="xsep" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="research.html">Research</a>
+        <a href="publications.html">Recent Publications</a>
+        <a href="past_publications.html">Other Publications</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="divider" aria-hidden="true"></div>
+    </header>
+
+    <section id="publications">
+      <h2>Recent Publications</h2>
+
+      <h3>I have recently been actively investigating in histone, kinetochore, and centromere evolution in non-model yeasts. Below are some recent publications reflecting these interests.</h3>
