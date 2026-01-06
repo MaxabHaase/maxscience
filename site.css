@@ -85,23 +85,30 @@ main{
   opacity: 0.65;            /* bump up if still subtle */
 }
 
-/* ASCII logo button */
+/* Make the logo container constrain to the page width */
 #logoBtn{
-  border:0;
-  background:transparent;
-  padding:0;
-  cursor:pointer;
-  text-align:left;
-  color: inherit;
-  font: inherit;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+  overflow-x: auto;                 /* scroll INSIDE the logo area */
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px;              /* gives room for scrollbar on some browsers */
 }
+
+/* Let the ASCII art keep its natural width so the container can scroll */
 #logoArt{
-  margin:0 0 10px;
+  display: inline-block;
   white-space: pre;
-  overflow-x: auto;
-  font-size: 11px;
-  line-height: 1.15;
-  user-select: none;
+  margin: 0;
+}
+
+/* Mobile: shrink a bit so it fits more often */
+@media (max-width: 520px){
+  #logoArt{
+    font-size: 9px;
+    line-height: 1.05;
+  }
 }
 .ch{ display:inline; } /* spans used for colored ASCII chars */
 
