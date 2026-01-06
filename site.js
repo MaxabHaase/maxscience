@@ -10,17 +10,16 @@ const PALETTE = [
 ];
 
 function invertHex(hex) {
-  // expects "#RRGGBB"
   const h = hex.replace("#", "");
   const r = parseInt(h.slice(0, 2), 16);
   const g = parseInt(h.slice(2, 4), 16);
   const b = parseInt(h.slice(4, 6), 16);
-
-  const ir = (255 - r).toString(16).padStart(2, "0");
-  const ig = (255 - g).toString(16).padStart(2, "0");
-  const ib = (255 - b).toString(16).padStart(2, "0");
-
-  return `#${ir}${ig}${ib}`;
+  return (
+    "#" +
+    (255 - r).toString(16).padStart(2, "0") +
+    (255 - g).toString(16).padStart(2, "0") +
+    (255 - b).toString(16).padStart(2, "0")
+  );
 }
 
 function setAccentByIndex(i) {
@@ -145,7 +144,41 @@ document.addEventListener("DOMContentLoaded", () => {
       recolorAsciiBySeg(logoPre, PALETTE, accentIndex);
     });
   }
+  // Auto-cycle settings
+  const AUTO_CYCLE = true;
+  const CYCLE_MS = 2500; // slower/faster here
+  
+  let cycleTimer = null;
+  
+  function tickCycle() {
+    accentIndex = setAccentByIndex(accentIndex + 1);
+    recolorAsciiBySeg(logoPre, PALETTE, accentIndex);
+  }
+  
+  function startCycle() {
+    if (!AUTO_CYCLE || cycleTimer) return;
+    cycleTimer = setInterval(tickCycle, CYCLE_MS);
+  }
+  
+  function stopCycle() {
+    if (!cycleTimer) return;
+    clearInterval(cycleTimer);
+    cycleTimer = null;
+  }
 
+  // Start cycling
+  startCycle();
+  
+  // Optional: pause when tab not visible (saves CPU + avoids “skipping”)
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopCycle();
+    else startCycle();
+  });
+  
+  // Keep click-to-cycle too (and it will sync with the auto state)
+  logoBtn.addEventListener("click", () => {
+    tickCycle();
+});
   // Dark mode toggle + persist + swap wordcloud image if present
   const toggleButton = document.getElementById("dark-mode-toggle");
   const body = document.body;
