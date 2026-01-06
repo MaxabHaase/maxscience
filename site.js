@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   // Auto-cycle settings
   const AUTO_CYCLE = true;
-  const CYCLE_MS = 2500; // slower/faster here
+  const CYCLE_MS = 7500; // slower/faster here
   
   let cycleTimer = null;
   
