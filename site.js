@@ -214,3 +214,64 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+function preloadFrames(urls) {
+  for (const u of urls) {
+    const img = new Image();
+    img.src = u;
+  }
+}
+
+function startFrameAnimation(imgEl, frames, fps = 10) {
+  const frameMs = 1000 / fps;
+  let i = 0;
+  let last = 0;
+  let rafId = null;
+
+  function tick(t) {
+    if (!last) last = t;
+    if (t - last >= frameMs) {
+      i = (i + 1) % frames.length;
+      imgEl.src = frames[i];
+      last = t;
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  rafId = requestAnimationFrame(tick);
+
+  // pause when tab hidden (saves CPU and prevents big jumps)
+  function onVis() {
+    if (document.hidden) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    } else if (!rafId) {
+      last = 0;
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+  document.addEventListener("visibilitychange", onVis);
+
+  return () => {
+    document.removeEventListener("visibilitychange", onVis);
+    if (rafId) cancelAnimationFrame(rafId);
+  };
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const imgEl = document.getElementById("logoAnim");
+  if (!imgEl) return;
+
+  // respect reduce-motion
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  // build your frame list (edit count + naming here)
+  const FRAME_COUNT = 60; // <-- set to your number of jpgs
+  const frames = Array.from({ length: FRAME_COUNT }, (_, idx) => {
+    const n = String(idx + 1).padStart(4, "0");
+    return `./logo_frames/frame_${n}.jpg`;
+  });
+
+  preloadFrames(frames);
+  startFrameAnimation(imgEl, frames, 10); // <-- FPS (try 6–12)
+});
