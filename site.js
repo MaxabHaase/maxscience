@@ -266,10 +266,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   // build your frame list (edit count + naming here)
-  const FRAME_COUNT = 60; // <-- set to your number of jpgs
+  const FRAME_COUNT = 12; // <-- set to your number of jpgs
   const frames = Array.from({ length: FRAME_COUNT }, (_, idx) => {
     const n = String(idx + 1).padStart(4, "0");
-    return `./logo_frames/frame_${n}.jpg`;
+    return `./logo_frames/Untitled-4-0${n}.jpg`;
   });
 
   preloadFrames(frames);
