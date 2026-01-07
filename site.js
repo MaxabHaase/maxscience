@@ -222,7 +222,7 @@ function preloadFrames(urls) {
   }
 }
 
-function startFrameAnimation(imgEl, frames, fps = 10) {
+function startFrameAnimation(imgEl, frames, fps = 1) {
   const frameMs = 1000 / fps;
   let i = 0;
   let last = 0;
