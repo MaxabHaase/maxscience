@@ -1,10 +1,10 @@
 // Palette used for ASCII glyphs AND cycling link color
 const PALETTE = [
+  "#E23D4F", // red
   "#E85D2A", // warm orange-red
   "#F4A340", // orange
   "#22B8B2", // cyan/teal (brighter)
   "#1F8A5B", // green
-  "#E23D4F", // red
   "#53C37B", // lighter green (more separation)
 ];
 
