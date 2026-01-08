@@ -275,6 +275,30 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!animBtn || !animImg) return;
 
   // respect reduce-motion: keep it static
-  if (window.matchMedia("(prefers-reduced-motion: reduce
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+  const FRAME_COUNT = 12;
+  const frames = Array.from({ length: FRAME_COUNT }, (_, idx) => {
+    const n = String(idx + 1).padStart(2, "0"); // 01..12
+    return `./logo_frames/Untitled-4-${n}.jpg`;
+  });
+
+  preloadFrames(frames);
+
+  // first frame static
+  animImg.src = frames[0];
+
+  // slow animation (2–4 fps). Try 2 if you want slower.
+  const player = makeFramePlayer(animImg, frames, 3);
+
+  // click ONLY the animation button to toggle play
+  animBtn.addEventListener("click", () => {
+    player.toggle();
+  });
+
+  // pause if tab hidden
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) player.stop();
+  });
+});
 
