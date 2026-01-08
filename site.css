@@ -283,3 +283,20 @@ a, .me, .meOpp, .btn {
   height: auto;
   border-radius: 10px;   /* optional */
 }
+
+#animBtn{
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  margin-top: 10px; /* adjust where you want it */
+}
+
+#animImg{
+  display: block;
+  width: 160px;      /* set the size you want */
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+}
