@@ -222,56 +222,78 @@ function preloadFrames(urls) {
   }
 }
 
-function startFrameAnimation(imgEl, frames, fps = 1) {
+function makeFramePlayer(imgEl, frames, fps = 3) {
   const frameMs = 1000 / fps;
   let i = 0;
   let last = 0;
   let rafId = null;
 
-  function tick(t) {
+  function step(t) {
     if (!last) last = t;
     if (t - last >= frameMs) {
       i = (i + 1) % frames.length;
       imgEl.src = frames[i];
       last = t;
     }
-    rafId = requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(step);
   }
 
-  rafId = requestAnimationFrame(tick);
-
-  // pause when tab hidden (saves CPU and prevents big jumps)
-  function onVis() {
-    if (document.hidden) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
-    } else if (!rafId) {
-      last = 0;
-      rafId = requestAnimationFrame(tick);
-    }
+  function start() {
+    if (rafId) return;
+    last = 0;
+    rafId = requestAnimationFrame(step);
   }
-  document.addEventListener("visibilitychange", onVis);
 
-  return () => {
-    document.removeEventListener("visibilitychange", onVis);
-    if (rafId) cancelAnimationFrame(rafId);
-  };
+  function stop() {
+    if (!rafId) return;
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  function toggle() {
+    if (rafId) stop();
+    else start();
+  }
+
+  // pause if tab hidden
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop();
+  });
+
+  return { start, stop, toggle, setFrame: (idx) => {
+    i = ((idx % frames.length) + frames.length) % frames.length;
+    imgEl.src = frames[i];
+  }};
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const imgEl = document.getElementById("logoAnim");
-  if (!imgEl) return;
+  const logoBtn = document.getElementById("logoBtn");
+  if (!imgEl || !logoBtn) return;
 
-  // respect reduce-motion
+  // respect reduce-motion: keep it static
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  // build your frame list (edit count + naming here)
-  const FRAME_COUNT = 12; // <-- set to your number of jpgs
+  // 12 frames, slow
+  const FRAME_COUNT = 12;
   const frames = Array.from({ length: FRAME_COUNT }, (_, idx) => {
     const n = String(idx + 1).padStart(4, "0");
-    return `./logo_frames/Untitled-4-0${n}.jpg`;
+    return `./logo_frames/frame_${n}.jpg`;
   });
 
   preloadFrames(frames);
-  startFrameAnimation(imgEl, frames, 10); // <-- FPS (try 6–12)
+
+  // ensure first frame shown initially
+  imgEl.src = frames[0];
+
+  // 2–4 fps feels “slow” for 12 frames. Try 3.
+  const player = makeFramePlayer(imgEl, frames, 3);
+
+  logoBtn.addEventListener("click", () => {
+    player.toggle();
+
+    // If you also want the click to cycle your accent color, keep this:
+    // tickCycle?.();
+  });
 });
+
